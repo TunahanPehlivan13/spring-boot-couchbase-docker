@@ -47,7 +47,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldReturnUser() {
+    void shouldReturnUserWhenExist() {
         User user = new User();
 
         when(userRepository.findById("userId")).thenReturn(Optional.of(user));
@@ -59,7 +59,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldReturnEmptyWhenUserDoesNotExist() {
+    void shouldNotReturnUserWhenDoesNotExist() {
         when(userRepository.findById("userId")).thenReturn(Optional.empty());
 
         Optional<User> result = userService.findUserBy("userId");
@@ -69,7 +69,7 @@ class UserServiceTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    void shouldReturnTrueWhenUserDoesExist(boolean userExist) {
+    void shouldReturnExistenceOfUser(boolean userExist) {
         when(userRepository.existsByEmailAndPassword("email", "password")).thenReturn(userExist);
 
         boolean result = userService.checkUserExist("email", "password");

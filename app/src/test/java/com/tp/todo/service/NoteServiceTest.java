@@ -61,7 +61,7 @@ class NoteServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUserIdDoesNotExist() {
+    void shouldThrowExceptionWhenUserIdIsNotPassed() {
         Note note = new Note();
         note.setText("text");
 
@@ -73,29 +73,28 @@ class NoteServiceTest {
     }
 
     @Test
-    void shouldReturnNote() {
+    void shouldReturnNoteWhenExist() {
         Note note = new Note();
-        String userId = "userId";
 
-        when(noteRepository.findById("userId")).thenReturn(Optional.of(note));
+        when(noteRepository.findById("noteId")).thenReturn(Optional.of(note));
 
-        Optional<Note> result = noteService.findNoteBy(userId);
+        Optional<Note> result = noteService.findNoteBy("noteId");
 
         assertTrue(result.isPresent());
         assertEquals(result.get(), note);
     }
 
     @Test
-    void shouldReturnEmptyNoteWhenNoteDoesNotExist() {
-        when(noteRepository.findById("userId")).thenReturn(Optional.empty());
+    void shouldNotReturnNoteWhenDoesNotExist() {
+        when(noteRepository.findById("noteId")).thenReturn(Optional.empty());
 
-        Optional<Note> result = noteService.findNoteBy("userId");
+        Optional<Note> result = noteService.findNoteBy("noteId");
 
         assertFalse(result.isPresent());
     }
 
     @Test
-    void shouldReturnNotesByUserId() {
+    void shouldReturnUsersNoteWhenUserHasIt() {
         Note note1 = new Note();
         Note note2 = new Note();
 
